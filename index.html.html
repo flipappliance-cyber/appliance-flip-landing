@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>The Appliance Flip Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --beige:#F2ECE0;
+    --beige-deep:#E7DFCE;
+    --white:#FFFFFF;
+    --ink:#181A1D;
+    --ink-soft:#4A4E54;
+    --blue:#2E4B72;
+    --blue-deep:#1F3554;
+    --blue-soft:#8298B4;
+    --line:#D8CFBB;
+    --line-on-dark:rgba(255,255,255,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ scroll-behavior:smooth; background:#F2ECE0; min-height:100%; }
+  body{
+    background:var(--beige);
+    color:var(--ink);
+    font-family:'Poppins', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .serif{ font-family:'Lora', serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 32px; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- reveal-on-scroll ---------- */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(242,236,224,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px; max-width:1100px; margin:0 auto;
+  }
+  .brandmark{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{
+    width:36px; height:36px; border-radius:50%;
+    border:1.5px solid var(--blue);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12px; color:var(--blue);
+  }
+  .brand-text{ font-family:'Lora', serif; font-weight:600; font-size:17px; letter-spacing:0.01em; color:var(--ink); }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Poppins', sans-serif; font-weight:500; font-size:14px;
+    padding:13px 26px; border-radius:999px;
+    background:var(--blue); color:var(--white);
+    border:1px solid var(--blue);
+    cursor:pointer; text-decoration:none;
+    transition:background .18s ease, transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{ background:var(--blue-deep); transform:translateY(-1px); box-shadow:0 8px 20px rgba(46,75,114,0.22); }
+  .btn.outline{ background:transparent; color:var(--ink); border:1px solid var(--ink); }
+  .btn.outline:hover{ background:var(--ink); color:var(--white); box-shadow:none; }
+  .btn.small{ padding:10px 20px; font-size:13px; }
+  .link-cta{
+    font-size:14px; color:var(--ink-soft); border-bottom:1px solid var(--blue-soft);
+    padding-bottom:2px; transition:color .18s ease, border-color .18s ease;
+  }
+  .link-cta:hover{ color:var(--ink); border-color:var(--ink); }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:96px 0 64px; }
+  .hero-grid{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:64px; align-items:center; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.14em;
+    color:var(--blue); text-transform:uppercase; margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:""; width:26px; height:1px; background:var(--blue); }
+  h1.serif{
+    font-size:clamp(38px, 4.6vw, 58px); line-height:1.1; font-weight:500;
+    color:var(--ink); margin-bottom:26px; letter-spacing:-0.01em;
+  }
+  h1.serif em{ font-style:italic; color:var(--blue); font-weight:500; }
+  .hero-sub{ font-size:17.5px; color:var(--ink-soft); max-width:46ch; margin-bottom:34px; font-weight:300; }
+  .hero-ctas{ display:flex; flex-wrap:wrap; align-items:center; gap:22px; margin-bottom:20px; }
+  .hero-note{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft); letter-spacing:0.04em; }
+
+  /* ---------- fact card ---------- */
+  .fact-card{
+    background:var(--white); border:1px solid var(--line);
+    padding:36px 34px; box-shadow:0 24px 48px rgba(24,26,29,0.06);
+  }
+  .fact-label{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.14em;
+    color:var(--blue-soft); text-transform:uppercase; margin-bottom:20px;
+    padding-bottom:16px; border-bottom:1px solid var(--line);
+  }
+  .fact-rows{ display:grid; gap:16px; }
+  .fact-row{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .fact-row .k{ font-size:13.5px; color:var(--ink-soft); }
+  .fact-row .v{ font-family:'Lora', serif; font-size:17px; font-weight:600; color:var(--ink); text-align:right; }
+
+  /* ---------- section shell ---------- */
+  section{ padding:88px 0; }
+  .section-head{ max-width:600px; margin-bottom:48px; }
+  .section-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.14em;
+    color:var(--blue); text-transform:uppercase; margin-bottom:16px;
+  }
+  h2.serif{ font-size:clamp(28px,3vw,38px); color:var(--ink); font-weight:500; line-height:1.18; letter-spacing:-0.01em; }
+  .lede{ color:var(--ink-soft); font-size:16px; margin-top:16px; max-width:58ch; font-weight:300; }
+
+  /* ---------- problem / stats ---------- */
+  .problem{ background:var(--beige); }
+  .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); margin-top:44px; }
+  .stat{ padding:0 32px; border-left:1px solid var(--line); }
+  .stat:first-child{ padding-left:0; border-left:none; }
+  .stat .num{ font-family:'Lora', serif; font-size:44px; font-weight:600; color:var(--blue); line-height:1; }
+  .stat .label{ font-size:13.5px; color:var(--ink-soft); margin-top:12px; max-width:22ch; }
+
+  /* ---------- curriculum ---------- */
+  .ch-list{ border-top:1px solid var(--line); }
+  .ch-item{
+    display:grid; grid-template-columns:70px 1fr; gap:24px;
+    padding:28px 0; border-bottom:1px solid var(--line);
+    transition:padding-left .25s ease;
+  }
+  .ch-item:hover{ padding-left:8px; }
+  .ch-num{ font-family:'Lora', serif; font-style:italic; font-weight:500; color:var(--blue-soft); font-size:20px; padding-top:2px; }
+  .ch-title{ font-family:'Lora', serif; font-weight:600; font-size:19px; color:var(--ink); margin-bottom:6px; }
+  .ch-desc{ font-size:14.5px; color:var(--ink-soft); max-width:58ch; font-weight:300; }
+
+  /* ---------- repairs ---------- */
+  .repairs{ background:var(--beige); }
+  .repair-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:44px; }
+  .repair-card{ background:var(--white); padding:26px 24px; }
+  .repair-card .price{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--blue);
+    letter-spacing:0.04em; margin-bottom:14px; display:block;
+  }
+  .repair-card h3{ font-family:'Lora', serif; font-weight:600; font-size:16.5px; color:var(--ink); margin-bottom:8px; }
+  .repair-card p{ font-size:13.5px; color:var(--ink-soft); font-weight:300; }
+
+  /* ---------- pricing ---------- */
+  .pricing{ background:var(--beige); color:var(--ink); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .pricing .section-tag{ color:var(--blue); }
+  .price-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:center; }
+  .price-copy h2.serif{ color:var(--ink); }
+  .price-copy .lede{ color:var(--ink-soft); }
+  .includes{ list-style:none; margin-top:26px; display:grid; gap:13px; }
+  .includes li{ font-size:14.5px; color:var(--ink-soft); display:flex; gap:12px; align-items:flex-start; font-weight:300; }
+  .includes li::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--blue); margin-top:8px; flex-shrink:0; }
+
+  .price-card{
+    background:var(--white); color:var(--ink);
+    border:1px solid var(--line);
+    padding:44px 38px; position:relative;
+    box-shadow:0 24px 48px rgba(24,26,29,0.06);
+  }
+  .save-pill{
+    display:inline-block; background:var(--blue); color:var(--white);
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em;
+    padding:6px 14px; border-radius:999px; margin-bottom:22px;
+  }
+  .price-row{ display:flex; align-items:baseline; gap:14px; margin-bottom:6px; }
+  .price-was{ font-family:'IBM Plex Mono', monospace; font-size:16px; color:var(--ink-soft); text-decoration:line-through; }
+  .price-now{ font-family:'Lora', serif; font-size:54px; font-weight:600; color:var(--ink); }
+  .price-unit{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:28px; }
+  .price-card .btn{ width:100%; justify-content:center; padding:16px; font-size:15px; }
+  .price-fine{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); margin-top:16px; text-align:center; }
+
+  /* ---------- faq ---------- */
+  .faq-list{ border-top:1px solid var(--line); }
+  .faq-item{ padding:26px 0; border-bottom:1px solid var(--line); }
+  .faq-q{ font-family:'Lora', serif; font-weight:600; font-size:17px; color:var(--ink); margin-bottom:8px; }
+  .faq-a{ font-size:14.5px; color:var(--ink-soft); max-width:60ch; font-weight:300; }
+
+  footer{ background:var(--beige); padding:36px 0; border-top:1px solid var(--line); }
+  .footer-row{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft);
+  }
+
+  @media (max-width:860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .stat-row{ grid-template-columns:1fr; gap:24px; }
+    .stat{ border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px; }
+    .stat:first-child{ border-top:none; padding-top:0; }
+    .repair-grid{ grid-template-columns:1fr 1fr; }
+    .price-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:560px){
+    .repair-grid{ grid-template-columns:1fr; }
+    .ch-item{ grid-template-columns:1fr; gap:6px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="brandmark">
+      <div class="brand-badge mono">AF</div>
+      <div class="brand-text">Appliance Flip Playbook</div>
+    </div>
+    <a href="#buy" class="btn small">Get the guide</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <div class="eyebrow">10-page field guide · instant download</div>
+      <h1 class="serif">Buy them broken.<br>Fix them cheap.<br><em>Rent them forever.</em></h1>
+      <p class="hero-sub">A calm, step-by-step playbook for turning $60 washing machines into $25–$45-a-month rental income — without a repair license, a warehouse, or much starting capital.</p>
+      <div class="hero-ctas">
+        <a href="#buy" class="btn">Get the playbook — $19.99</a>
+        <a href="#inside" class="link-cta">See what's inside</a>
+      </div>
+      <div class="hero-note">DELIVERED INSTANTLY · READ ONCE, USE FOR YEARS</div>
+    </div>
+
+    <div class="fact-card reveal in">
+      <div class="fact-label">At a glance</div>
+      <div class="fact-rows">
+        <div class="fact-row"><span class="k">Pages</span><span class="v">10</span></div>
+        <div class="fact-row"><span class="k">Core repairs taught</span><span class="v">6</span></div>
+        <div class="fact-row"><span class="k">Typical buy price</span><span class="v">$30–$100</span></div>
+        <div class="fact-row"><span class="k">Typical rental income</span><span class="v">$25–$45 / mo</span></div>
+        <div class="fact-row"><span class="k">Estimated break-even</span><span class="v">~60 days</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">The situation</div>
+      <h2 class="serif">Every neighborhood has a garage full of these.</h2>
+      <p class="lede">Landlords haul out working machines just because they're old. Renters can't justify $600 for something they might use for a year. This guide shows you how to sit in the middle of that gap.</p>
+    </div>
+    <div class="stat-row reveal">
+      <div class="stat">
+        <div class="num serif">80%</div>
+        <div class="label">of failures trace to one of six cheap, swappable parts</div>
+      </div>
+      <div class="stat">
+        <div class="num serif">2–3 hrs</div>
+        <div class="label">average repair time once you know the six fixes</div>
+      </div>
+      <div class="stat">
+        <div class="num serif">$600–1k</div>
+        <div class="label">typical capital needed to reach 15 rental units</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inside">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Inside the guide</div>
+      <h2 class="serif">Ten chapters. One complete loop.</h2>
+      <p class="lede">Every chapter answers a question you'd actually ask before putting your own money into a used machine.</p>
+    </div>
+    <div class="ch-list">
+      <div class="ch-item reveal">
+        <div class="ch-num">I.</div>
+        <div><div class="ch-title">Why washers work as a business</div><div class="ch-desc">The economics behind buy-fix-rent, and why this category has less competition than most side hustles.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">II.</div>
+        <div><div class="ch-title">Where do you find cheap machines?</div><div class="ch-desc">Five sourcing channels — three of them offline — that keep inventory coming without daily marketplace scrolling.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">III.</div>
+        <div><div class="ch-title">How do you know what's worth buying?</div><div class="ch-desc">A five-question filter and a buy/skip table so you stop wasting trips on units that aren't worth fixing.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">IV.</div>
+        <div><div class="ch-title">How do you fix them without a license?</div><div class="ch-desc">The six repairs that cover most failures, plus how to look up any model's exact fix for free.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">V.</div>
+        <div><div class="ch-title">Getting a unit rental-ready</div><div class="ch-desc">The cleaning, testing, and pricing checklist that lets you charge rental rates, not garage-sale prices.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">VI.</div>
+        <div><div class="ch-title">How do you find renters?</div><div class="ch-desc">Where your actual customers are looking, and what makes them choose renting over buying used.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">VII.</div>
+        <div><div class="ch-title">Contracts, deposits, protection</div><div class="ch-desc">A plain-language rental agreement checklist so you look professional from your very first placement.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">VIII.</div>
+        <div><div class="ch-title">How do you scale without a fortune?</div><div class="ch-desc">A reinvestment ladder from one machine to a 15–20 unit fleet, funded by the machines themselves.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">IX.</div>
+        <div><div class="ch-title">A sample first-year model</div><div class="ch-desc">Illustrative month-by-month numbers so you can plan your own version against real assumptions.</div></div>
+      </div>
+      <div class="ch-item reveal">
+        <div class="ch-num">X.</div>
+        <div><div class="ch-title">Your 30-day action plan</div><div class="ch-desc">A week-by-week checklist that takes you from zero to your first placed rental unit.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="repairs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">A preview</div>
+      <h2 class="serif">The six repairs that cover most failures.</h2>
+      <p class="lede">You don't need a trade certificate. You need to recognize these, in order, every time.</p>
+    </div>
+    <div class="repair-grid reveal">
+      <div class="repair-card"><span class="price">$5–15</span><h3>Lid / door switch</h3><p>Check this first if the machine won't start at all.</p></div>
+      <div class="repair-card"><span class="price">$10–25</span><h3>Drive belt</h3><p>Worn or snapped belts cause "won't spin" symptoms.</p></div>
+      <div class="repair-card"><span class="price">$15–35</span><h3>Water inlet valve</h3><p>The usual cause when a machine won't fill.</p></div>
+      <div class="repair-card"><span class="price">$20–45</span><h3>Drain pump</h3><p>Fixes "won't drain" and standing-water issues.</p></div>
+      <div class="repair-card"><span class="price">$10–20</span><h3>Coupler / clutch</h3><p>A common wear part on direct-drive top-loaders.</p></div>
+      <div class="repair-card"><span class="price">$0–10</span><h3>Cord, fuse, cutoff</h3><p>The cheapest possible fix — always check it first.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="buy">
+  <div class="wrap">
+    <div class="price-grid">
+      <div class="price-copy reveal">
+        <div class="section-tag">Get instant access</div>
+        <h2 class="serif">Everything you need to place your first machine this month.</h2>
+        <ul class="includes">
+          <li>The full 10-page Appliance Flip Playbook, formatted to print or read on any device</li>
+          <li>Buy/skip filter table and the six-repair reference sheet</li>
+          <li>A rental-ready checklist and a simple contract outline</li>
+          <li>The 30-day action plan to get your first unit placed</li>
+        </ul>
+      </div>
+      <div class="price-card reveal">
+        <span class="save-pill">SAVE $30</span>
+        <div class="price-row">
+          <span class="price-was">$49.99</span>
+        </div>
+        <div class="price-now">$19.99</div>
+        <div class="price-unit">One-time payment</div>
+        <a href="#" class="btn">Buy now</a>
+        <div class="price-fine">Instant download · No subscription</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Before you buy</div>
+      <h2 class="serif">A few honest questions.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">Do I need any repair experience?</div>
+        <div class="faq-a">No. The guide is written for someone who has never opened an appliance before, and points you to free model-specific videos for anything not covered directly.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">How much money do I need to start?</div>
+        <div class="faq-a">Most people start with $150–$300: enough for one or two machines, parts, and a basic tool kit. The guide shows how to reinvest from there.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">Does this work outside the US?</div>
+        <div class="faq-a">The core method — sourcing, repairing, renting — applies broadly, but pricing examples and marketplace names reference the US. Adjust sourcing channels to your local market.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">What format is the guide?</div>
+        <div class="faq-a">A clean, printable digital document delivered immediately after purchase.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>© <span id="year"></span> APPLIANCE FLIP PLAYBOOK</span>
+    <span>QUESTIONS: YOUR@EMAIL.COM</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
